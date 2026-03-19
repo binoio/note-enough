@@ -562,8 +562,8 @@ pause_for_user
 banner "PHASE 6: Upload to App Store Connect"
 
 UPLOAD_METHOD=$(choose_option "How would you like to upload?" \
-    "Xcode Organizer (recommended — visual, handles signing)" \
-    "Command line (xcodebuild -exportArchive + xcrun altool)" \
+    "Xcode Organizer (recommended for the VERY FIRST upload — handles signing)" \
+    "Command line (xcodebuild — often fails if first-time profiles don't exist)" \
     "Transporter app (drag-and-drop IPA upload)")
 
 echo ""
@@ -571,7 +571,9 @@ echo ""
 case "$UPLOAD_METHOD" in
     1)
         section "6A. Upload via Xcode Organizer"
-
+        info "Use this if this is the first time uploading io.bino.noteenough."
+        info "Xcode UI is the most reliable way to register App IDs and profiles automatically."
+        echo ""
         step "Opening the archive in Xcode Organizer..."
         if [[ -d "$ARCHIVE_PATH" ]]; then
             open "$ARCHIVE_PATH"
@@ -600,6 +602,11 @@ case "$UPLOAD_METHOD" in
         ;;
     2)
         section "6A. Upload via Command Line"
+
+        warn "NOTE: This method often fails on the VERY FIRST upload of a new app"
+        warn "because it cannot automatically create missing App Store profiles."
+        info "Use Choice 1 (Xcode Organizer) instead if you haven't uploaded once yet."
+        echo ""
 
         step "Creating ExportOptions.plist..."
 
@@ -663,8 +670,12 @@ PLIST
                 echo ""
                 success "Upload complete!"
             else
+                echo ""
                 fail "Export/upload failed."
-                info "Try the Xcode Organizer method instead."
+                info "Common reasons: signing issues, Team ID mismatch, or network errors."
+                info "You can also try the Xcode Organizer method (Choice 1)."
+                echo ""
+                exit 1
             fi
         else
             fail "No archive found. Run Phase 5 to build the archive first."
