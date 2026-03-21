@@ -3,31 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Note Enough - Handwritten Notes for iPad</title>
+    <title>Note Enough - Minimalist iPadOS Note-taking</title>
+    <meta name="description" content="A minimalist iPadOS note-taking app built with SwiftUI and PencilKit, focusing on handwritten stacks and digital persistence.">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #FF9500; }
-        .hero { text-align: center; padding: 3rem 0; background: #fffbf0; border-radius: 8px; margin-bottom: 2rem; }
-        .btn { display: inline-block; background: #FF9500; color: white; padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .links { margin-top: 2rem; }
+        :root {
+            --bg: #ffffff;
+            --fg: #1d1d1f;
+            --secondary: #86868b;
+            --accent: #FF9500;
+            --card-bg: #fffbf0;
+            --border: #f0e6d2;
+            --radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000000;
+                --fg: #f5f5f7;
+                --secondary: #86868b;
+                --accent: #ff9f0a;
+                --card-bg: #1c1c1e;
+                --border: #38383a;
+            }
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0 0 20px;
+            letter-spacing: -0.015em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cta {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .cta:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .version-info {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .section {
+            padding: 60px;
+            border-radius: var(--radius);
+            margin: 80px 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+
+        .list {
+            max-width: 700px;
+            margin: 0 auto;
+            padding-left: 20px;
+        }
+
+        .list li {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .section { padding: 40px 20px; }
+        }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>Note Enough</h1>
-        <p>A minimalist iPadOS note-taking app built with SwiftUI and PencilKit.</p>
-        <a href="https://github.com/binoio/note-enough/releases" class="btn">Download Latest Release</a>
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">✍️</div>
+                Note Enough
+            </a>
+            <a href="https://github.com/binoio/note-enough" class="cta" style="background: none; color: var(--accent); padding: 0;">GitHub</a>
+        </nav>
+
+        <header>
+            <h1>Note Enough</h1>
+            <p class="subtitle">Focus on your thoughts, not the UI. A minimalist iPadOS note-taking app designed for precision and digital organization.</p>
+            <div class="cta-container">
+                <a href="https://github.com/binoio/note-enough/releases/latest" class="cta" id="download-btn">View on App Store</a>
+                <span class="version-info">Requires iPadOS 17.0 or later</span>
+            </div>
+        </header>
+
+        <script>
+            async function updateDownloadLink() {
+                try {
+                    const response = await fetch('https://api.github.com/repos/binoio/note-enough/releases/latest');
+                    const data = await response.json();
+                    const btn = document.getElementById('download-btn');
+                    // For iPad apps, we might just link to the release page if not on MAS yet
+                    if (data.html_url) {
+                        btn.href = data.html_url;
+                        btn.innerText = `View Release ${data.tag_name}`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching latest release:', error);
+                }
+            }
+            updateDownloadLink();
+        </script>
+
+        <section class="features">
+            <div class="feature-card">
+                <span class="feature-icon">📚</span>
+                <h3>The Heap</h3>
+                <p>Organize all your digital notebooks in a clean, grid-based home screen for instant access.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🖊️</span>
+                <h3>Precision Drawing</h3>
+                <p>Leverage the full power of Apple Pencil and PencilKit with native tools and zero latency.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📂</span>
+                <h3>Digital Stacks</h3>
+                <p>Configure paper type, size, and orientation. Your drawings persist automatically via SwiftData.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Designed for iPad</h2>
+            <ul class="list">
+                <li><strong>Full PencilKit</strong>: Use the standard tool palette with full pressure and tilt sensitivity.</li>
+                <li><strong>Configurable Stacks</strong>: Choose between Plain, Textured, or Graph paper styles.</li>
+                <li><strong>Intuitive Navigation</strong>: Swipe naturally between pages with configurable scroll directions.</li>
+                <li><strong>Modern Persistence</strong>: Powered by <strong>SwiftData</strong> for reliable, efficient storage.</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Michael Bino</p>
+            <p><a href="https://github.com/binoio/note-enough">GitHub</a> &nbsp;•&nbsp; <a href="privacy.md">Privacy Policy</a></p>
+        </footer>
     </div>
-    <h2>Features</h2>
-    <ul>
-        <li><strong>Handwritten Stacks</strong>: Organize your notes into digital notebooks.</li>
-        <li><strong>Full PencilKit</strong>: Native Apple Pencil support with all standard tools.</li>
-        <li><strong>SwiftData Persistence</strong>: Your notes are saved safely and efficiently.</li>
-        <li><strong>Minimalist Design</strong>: Focus on your thoughts, not the UI.</li>
-    </ul>
-    <div class="links">
-        <a href="privacy.md">Privacy Policy</a>
-    </div>
-    <p>© 2026 Note Enough</p>
 </body>
 </html>
