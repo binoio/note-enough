@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Enough - Minimalist iPadOS Note-taking</title>
     <meta name="description" content="A handwritten note-taking app for iPad and Apple Pencil.">
+    <link rel="icon" type="image/png" href="icon.png">
     <style>
         :root {
             --bg: #ffffff;
@@ -62,13 +63,8 @@
         .logo-icon {
             width: 40px;
             height: 40px;
-            background: var(--accent);
             border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
+            display: block;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
@@ -198,7 +194,7 @@
     <div class="container">
         <nav>
             <a href="#" class="logo">
-                <div class="logo-icon">✍️</div>
+                <img class="logo-icon" src="icon.png" alt="Note Enough app icon">
                 Note Enough
             </a>
             <a href="https://bino.io" style="color: var(--secondary); text-decoration: none; font-weight: 500;">Bino.io Apps</a>
