@@ -94,20 +94,15 @@
             gap: 15px;
         }
 
-        .cta {
+        /* Apple's badge artwork must not be altered; only scaled as a whole. */
+        .app-store-badge {
             display: inline-block;
-            background-color: var(--accent);
-            color: #fff;
-            padding: 12px 32px;
-            border-radius: 25px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: transform 0.2s, opacity 0.2s;
+            line-height: 0;
         }
 
-        .cta:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
+        .app-store-badge img {
+            width: 150px;
+            height: auto;
         }
 
         .version-info {
@@ -204,28 +199,16 @@
             <h1>Note Enough</h1>
             <p class="subtitle">A handwritten note-taking app for iPad and Apple Pencil.</p>
             <div class="cta-container">
-                <a href="https://github.com/binoio/note-enough/releases/latest" class="cta" id="download-btn">View on App Store</a>
+                <a class="app-store-badge" href="https://apps.apple.com/us/app/note-enough/id6760793994">
+                    <picture>
+                        <source srcset="images/app-store-badge-white.svg" media="(prefers-color-scheme: dark)">
+                        <img src="images/app-store-badge-black.svg" alt="Download on the App Store" width="150" height="50">
+                    </picture>
+                </a>
                 <span class="version-info">Requires iPadOS 17.0 or later</span>
             </div>
         </header>
 
-        <script>
-            async function updateDownloadLink() {
-                try {
-                    const response = await fetch('https://api.github.com/repos/binoio/note-enough/releases/latest');
-                    const data = await response.json();
-                    const btn = document.getElementById('download-btn');
-                    // For iPad apps, we might just link to the release page if not on MAS yet
-                    if (data.html_url) {
-                        btn.href = data.html_url;
-                        btn.innerText = `View Release ${data.tag_name}`;
-                    }
-                } catch (error) {
-                    console.error('Error fetching latest release:', error);
-                }
-            }
-            updateDownloadLink();
-        </script>
 
         <section class="features">
             <div class="feature-card">
